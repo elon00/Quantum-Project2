@@ -25,7 +25,7 @@ with open("requirements-dev.txt", encoding="utf-8") as f:
 setup(
     name="quantum-deutsch-jozsa",
     version="1.0.0",
-    author="Quantum Project Team",
+    author="Martin Luther",
     author_email="martinlutherupa1@gmail.com",
     description="Professional implementation of the Deutsch-Jozsa quantum algorithm using Qiskit",
     long_description=long_description,

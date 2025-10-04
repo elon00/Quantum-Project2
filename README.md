@@ -331,15 +331,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
+- **Martin Luther** (martinlutherupa1@gmail.com) - Project creator and maintainer
 - IBM Quantum team for Qiskit framework
 - Quantum computing community for educational resources
-- Contributors and maintainers
+- Contributors and supporters
 
 ## 📞 Contact & Support
 
 - **Issues**: [GitHub Issues](https://github.com/elon00/Quantum-Project2/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/elon00/Quantum-Project2/discussions)
-- **Email**: [Project Email]
+- **Email**: [martinlutherupa1@gmail.com](mailto:martinlutherupa1@gmail.com)
 
 ## 🔄 Version History
 
@@ -376,6 +377,6 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
 ---
 
-**Made with ❤️ by the Quantum Computing Community**
+**Made with ❤️ by Martin Luther (martinlutherupa1@gmail.com)**
 
 *Star ⭐ this repository if you find it helpful!*

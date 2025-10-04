@@ -5,7 +5,7 @@ Deutsch-Jozsa Algorithm Implementation
 This module implements the Deutsch-Jozsa quantum algorithm using Qiskit,
 demonstrating quantum-classical speedup for function classification.
 
-Author: Quantum Project Team
+Author: Martin Luther
 License: MIT
 Version: 2.0.0
 """

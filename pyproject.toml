@@ -10,10 +10,10 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Quantum Project Team", email = "martinlutherupa1@gmail.com"}
+    {name = "Martin Luther", email = "martinlutherupa1@gmail.com"}
 ]
 maintainers = [
-    {name = "Quantum Project Team", email = "martinlutherupa1@gmail.com"}
+    {name = "Martin Luther", email = "martinlutherupa1@gmail.com"}
 ]
 keywords = [
     "quantum computing",
