@@ -1,0 +1,2 @@
+liboqs-python>=0.10.0
+cryptography>=42.0.0
