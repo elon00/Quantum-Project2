@@ -5,8 +5,7 @@ This module contains comprehensive unit tests for all components
 of the Deutsch-Jozsa quantum algorithm including enhanced features.
 """
 
-import time
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import patch
 
 import pytest
 from qiskit import QuantumCircuit
