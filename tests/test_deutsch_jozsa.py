@@ -5,43 +5,45 @@ This module contains comprehensive unit tests for all components
 of the Deutsch-Jozsa quantum algorithm including enhanced features.
 """
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock
 import time
+from unittest.mock import MagicMock, Mock, patch
+
+import pytest
 from qiskit import QuantumCircuit
+
 from deutsch_jozsa import (
-    DeutschJozsaAlgorithm,
-    FunctionType,
     AlgorithmResult,
+    AlgorithmSummary,
+    DeutschJozsaAlgorithm,
     ExecutionMetrics,
-    AlgorithmSummary
+    FunctionType,
 )
 
 
 class TestDeutschJozsaAlgorithmInit:
     """Test suite for DeutschJozsaAlgorithm initialization."""
-    
+
     def test_init_default_qubits(self):
         """Test initialization with default number of qubits."""
         dj = DeutschJozsaAlgorithm()
         assert dj.n_qubits == 3
         assert dj.backend is not None
-    
+
     def test_init_custom_qubits(self):
         """Test initialization with custom number of qubits."""
         dj = DeutschJozsaAlgorithm(n_qubits=5)
         assert dj.n_qubits == 5
-    
+
     def test_init_single_qubit(self):
         """Test initialization with single qubit."""
         dj = DeutschJozsaAlgorithm(n_qubits=1)
         assert dj.n_qubits == 1
-    
+
     def test_init_invalid_qubits_zero(self):
         """Test that initialization fails with zero qubits."""
         with pytest.raises(ValueError, match="Number of qubits must be at least 1"):
             DeutschJozsaAlgorithm(n_qubits=0)
-    
+
     def test_init_invalid_qubits_negative(self):
         """Test that initialization fails with negative qubits."""
         with pytest.raises(ValueError, match="Number of qubits must be at least 1"):
@@ -50,60 +52,60 @@ class TestDeutschJozsaAlgorithmInit:
 
 class TestCircuitCreation:
     """Test suite for quantum circuit creation methods."""
-    
+
     def test_create_base_circuit_structure(self):
         """Test that base circuit has correct structure."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         circuit = dj.create_base_circuit()
-        
+
         assert isinstance(circuit, QuantumCircuit)
         assert circuit.num_qubits == 4  # 3 input + 1 output
         assert circuit.num_clbits == 3  # 3 classical bits for measurement
-    
+
     def test_create_base_circuit_gates(self):
         """Test that base circuit contains expected gates."""
         dj = DeutschJozsaAlgorithm(n_qubits=2)
         circuit = dj.create_base_circuit()
-        
+
         # Check that circuit has gates (X and H gates)
         assert len(circuit.data) > 0
-    
+
     def test_create_constant_oracle(self):
         """Test constant oracle creation."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         oracle = dj.create_constant_oracle()
-        
+
         assert isinstance(oracle, QuantumCircuit)
         assert oracle.num_qubits == 4
         # Constant oracle should have no gates
         assert len(oracle.data) == 0
-    
+
     def test_create_balanced_oracle(self):
         """Test balanced oracle creation."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         oracle = dj.create_balanced_oracle()
-        
+
         assert isinstance(oracle, QuantumCircuit)
         assert oracle.num_qubits == 4
         # Balanced oracle should have CNOT gates
         assert len(oracle.data) == 3  # One CNOT per input qubit
-    
+
     def test_build_circuit_with_constant_oracle(self):
         """Test building complete circuit with constant oracle."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         oracle = dj.create_constant_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         assert isinstance(circuit, QuantumCircuit)
         assert circuit.num_qubits == 4
         assert circuit.num_clbits == 3
-    
+
     def test_build_circuit_with_balanced_oracle(self):
         """Test building complete circuit with balanced oracle."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         oracle = dj.create_balanced_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         assert isinstance(circuit, QuantumCircuit)
         assert circuit.num_qubits == 4
         assert circuit.num_clbits == 3
@@ -111,125 +113,125 @@ class TestCircuitCreation:
 
 class TestCircuitExecution:
     """Test suite for circuit execution methods."""
-    
+
     def test_run_circuit_returns_counts(self):
         """Test that run_circuit returns measurement counts."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         oracle = dj.create_constant_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         counts = dj.run_circuit(circuit, shots=100)
-        
+
         assert isinstance(counts, dict)
         assert len(counts) > 0
         assert all(isinstance(k, str) for k in counts.keys())
         assert all(isinstance(v, int) for v in counts.values())
-    
+
     def test_run_circuit_custom_shots(self):
         """Test circuit execution with custom number of shots."""
         dj = DeutschJozsaAlgorithm(n_qubits=2)
         oracle = dj.create_constant_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         shots = 500
         counts = dj.run_circuit(circuit, shots=shots)
-        
+
         total_counts = sum(counts.values())
         assert total_counts == shots
-    
+
     def test_run_circuit_constant_oracle_result(self):
         """Test that constant oracle produces all-zero measurements."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         oracle = dj.create_constant_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         counts = dj.run_circuit(circuit, shots=1024)
-        
+
         # Constant function should measure all zeros
-        assert '000' in counts
+        assert "000" in counts
         assert len(counts) == 1
-    
+
     def test_run_circuit_balanced_oracle_result(self):
         """Test that balanced oracle produces non-zero measurements."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         oracle = dj.create_balanced_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         counts = dj.run_circuit(circuit, shots=1024)
-        
+
         # Balanced function should not measure all zeros
-        assert '000' not in counts or len(counts) > 1
+        assert "000" not in counts or len(counts) > 1
 
 
 class TestResultInterpretation:
     """Test suite for result interpretation methods."""
-    
+
     def test_interpret_constant_correct(self):
         """Test correct interpretation of constant function."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        counts = {'000': 1024}
-        
-        result = dj.interpret_result(counts, 'constant')
+        counts = {"000": 1024}
+
+        result = dj.interpret_result(counts, "constant")
         assert result is True
-    
+
     def test_interpret_constant_incorrect(self):
         """Test incorrect interpretation of constant function."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        counts = {'111': 1024}
-        
-        result = dj.interpret_result(counts, 'constant')
+        counts = {"111": 1024}
+
+        result = dj.interpret_result(counts, "constant")
         assert result is False
-    
+
     def test_interpret_balanced_correct(self):
         """Test correct interpretation of balanced function."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        counts = {'111': 1024}
-        
-        result = dj.interpret_result(counts, 'balanced')
+        counts = {"111": 1024}
+
+        result = dj.interpret_result(counts, "balanced")
         assert result is True
-    
+
     def test_interpret_balanced_incorrect(self):
         """Test incorrect interpretation of balanced function."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        counts = {'000': 1024}
-        
-        result = dj.interpret_result(counts, 'balanced')
+        counts = {"000": 1024}
+
+        result = dj.interpret_result(counts, "balanced")
         assert result is False
-    
+
     def test_interpret_invalid_function_type(self):
         """Test that invalid function type raises error."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        counts = {'000': 1024}
-        
+        counts = {"000": 1024}
+
         with pytest.raises(ValueError, match="Unknown function type"):
-            dj.interpret_result(counts, 'invalid')
+            dj.interpret_result(counts, "invalid")
 
 
 class TestVisualization:
     """Test suite for visualization methods."""
-    
-    @patch('deutsch_jozsa.plt.show')
-    @patch('deutsch_jozsa.plot_histogram')
+
+    @patch("deutsch_jozsa.plt.show")
+    @patch("deutsch_jozsa.plot_histogram")
     def test_visualize_results_no_save(self, mock_plot, mock_show):
         """Test visualization without saving."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        counts = {'000': 1024}
-        
+        counts = {"000": 1024}
+
         dj.visualize_results(counts, "Test Title")
-        
+
         mock_plot.assert_called_once_with(counts)
         mock_show.assert_called_once()
-    
-    @patch('deutsch_jozsa.plt.savefig')
-    @patch('deutsch_jozsa.plt.show')
-    @patch('deutsch_jozsa.plot_histogram')
+
+    @patch("deutsch_jozsa.plt.savefig")
+    @patch("deutsch_jozsa.plt.show")
+    @patch("deutsch_jozsa.plot_histogram")
     def test_visualize_results_with_save(self, mock_plot, mock_show, mock_savefig):
         """Test visualization with saving to file."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        counts = {'000': 1024}
-        
+        counts = {"000": 1024}
+
         dj.visualize_results(counts, "Test Title", save_path="test.png")
-        
+
         mock_plot.assert_called_once_with(counts)
         mock_savefig.assert_called_once()
         mock_show.assert_called_once()
@@ -237,143 +239,143 @@ class TestVisualization:
 
 class TestFullAlgorithm:
     """Test suite for complete algorithm execution."""
-    
+
     def test_run_algorithm_returns_tuple(self):
         """Test that run_algorithm returns tuple of results."""
         dj = DeutschJozsaAlgorithm(n_qubits=2)
-        
-        with patch.object(dj, 'visualize_results'):
+
+        with patch.object(dj, "visualize_results"):
             result = dj.run_algorithm(visualize=False)
-        
+
         assert isinstance(result, tuple)
         assert len(result) == 2
         assert isinstance(result[0], bool)
         assert isinstance(result[1], bool)
-    
+
     def test_run_algorithm_constant_passes(self):
         """Test that constant function test passes."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        
-        with patch.object(dj, 'visualize_results'):
+
+        with patch.object(dj, "visualize_results"):
             const_correct, _ = dj.run_algorithm(visualize=False)
-        
+
         assert const_correct is True
-    
+
     def test_run_algorithm_balanced_passes(self):
         """Test that balanced function test passes."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        
-        with patch.object(dj, 'visualize_results'):
+
+        with patch.object(dj, "visualize_results"):
             _, balanced_correct = dj.run_algorithm(visualize=False)
-        
+
         assert balanced_correct is True
-    
+
     def test_run_algorithm_with_visualization(self):
         """Test algorithm execution with visualization enabled."""
         dj = DeutschJozsaAlgorithm(n_qubits=2)
-        
-        with patch.object(dj, 'visualize_results') as mock_viz:
+
+        with patch.object(dj, "visualize_results") as mock_viz:
             dj.run_algorithm(visualize=True)
-            
+
             # Should be called twice (constant and balanced)
             assert mock_viz.call_count == 2
-    
+
     def test_run_algorithm_without_visualization(self):
         """Test algorithm execution with visualization disabled."""
         dj = DeutschJozsaAlgorithm(n_qubits=2)
-        
-        with patch.object(dj, 'visualize_results') as mock_viz:
+
+        with patch.object(dj, "visualize_results") as mock_viz:
             dj.run_algorithm(visualize=False)
-            
+
             # Should not be called
             mock_viz.assert_not_called()
 
 
 class TestEdgeCases:
     """Test suite for edge cases and error handling."""
-    
+
     def test_single_qubit_algorithm(self):
         """Test algorithm with single qubit."""
         dj = DeutschJozsaAlgorithm(n_qubits=1)
-        
-        with patch.object(dj, 'visualize_results'):
+
+        with patch.object(dj, "visualize_results"):
             const_correct, balanced_correct = dj.run_algorithm(visualize=False)
-        
+
         assert isinstance(const_correct, bool)
         assert isinstance(balanced_correct, bool)
-    
+
     def test_large_number_of_qubits(self):
         """Test algorithm with larger number of qubits."""
         dj = DeutschJozsaAlgorithm(n_qubits=5)
-        
+
         oracle = dj.create_constant_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         assert circuit.num_qubits == 6
         assert circuit.num_clbits == 5
-    
+
     def test_minimal_shots(self):
         """Test circuit execution with minimal shots."""
         dj = DeutschJozsaAlgorithm(n_qubits=2)
         oracle = dj.create_constant_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         counts = dj.run_circuit(circuit, shots=1)
-        
+
         assert sum(counts.values()) == 1
 
 
 class TestIntegration:
     """Integration tests for complete workflows."""
-    
+
     def test_complete_workflow_constant(self):
         """Test complete workflow for constant function."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        
+
         # Create oracle
         oracle = dj.create_constant_oracle()
-        
+
         # Build circuit
         circuit = dj.build_circuit(oracle)
-        
+
         # Run circuit
         counts = dj.run_circuit(circuit)
-        
+
         # Interpret results
-        is_correct = dj.interpret_result(counts, 'constant')
-        
+        is_correct = dj.interpret_result(counts, "constant")
+
         assert is_correct is True
-    
+
     def test_complete_workflow_balanced(self):
         """Test complete workflow for balanced function."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
-        
+
         # Create oracle
         oracle = dj.create_balanced_oracle()
-        
+
         # Build circuit
         circuit = dj.build_circuit(oracle)
-        
+
         # Run circuit
         counts = dj.run_circuit(circuit)
-        
+
         # Interpret results
-        is_correct = dj.interpret_result(counts, 'balanced')
-        
+        is_correct = dj.interpret_result(counts, "balanced")
+
         assert is_correct is True
-    
+
     def test_multiple_runs_consistency(self):
         """Test that multiple runs produce consistent results."""
         dj = DeutschJozsaAlgorithm(n_qubits=3)
         oracle = dj.create_constant_oracle()
         circuit = dj.build_circuit(oracle)
-        
+
         results = []
         for _ in range(5):
             counts = dj.run_circuit(circuit, shots=100)
-            is_correct = dj.interpret_result(counts, 'constant')
+            is_correct = dj.interpret_result(counts, "constant")
             results.append(is_correct)
-        
+
         # All runs should produce consistent results
         assert all(results)
 
@@ -391,7 +393,7 @@ class TestEnhancedFeatures:
         assert summary.function_type == FunctionType.CONSTANT
         assert summary.result == AlgorithmResult.SUCCESS
         assert summary.confidence == 1.0
-        assert '00' in summary.measurements
+        assert "00" in summary.measurements
         assert summary.metrics.execution_time > 0
         assert summary.metrics.circuit_depth > 0
         assert summary.metrics.gate_count > 0
@@ -406,7 +408,7 @@ class TestEnhancedFeatures:
         assert summary.function_type == FunctionType.BALANCED
         assert summary.result == AlgorithmResult.SUCCESS
         assert summary.confidence == 1.0
-        assert '00' not in summary.measurements or len(summary.measurements) > 1
+        assert "00" not in summary.measurements or len(summary.measurements) > 1
         assert summary.metrics.execution_time > 0
 
     def test_enhanced_algorithm_with_optimization(self):
@@ -416,9 +418,7 @@ class TestEnhancedFeatures:
         # Test different optimization levels
         for opt_level in [0, 1, 2, 3]:
             summary = dj.run_enhanced_algorithm(
-                FunctionType.CONSTANT,
-                shots=50,
-                optimization_level=opt_level
+                FunctionType.CONSTANT, shots=50, optimization_level=opt_level
             )
 
             assert isinstance(summary, AlgorithmSummary)
@@ -498,18 +498,18 @@ class TestEnhancedFeatures:
         dj = DeutschJozsaAlgorithm(n_qubits=2)
 
         # Test constant function with perfect results
-        counts_perfect = {'00': 100}
-        confidence = dj._calculate_confidence(counts_perfect, 'constant')
+        counts_perfect = {"00": 100}
+        confidence = dj._calculate_confidence(counts_perfect, "constant")
         assert confidence == 1.0
 
         # Test constant function with imperfect results
-        counts_imperfect = {'00': 80, '01': 20}
-        confidence = dj._calculate_confidence(counts_imperfect, 'constant')
+        counts_imperfect = {"00": 80, "01": 20}
+        confidence = dj._calculate_confidence(counts_imperfect, "constant")
         assert confidence == 0.8
 
         # Test balanced function with perfect results
-        counts_balanced = {'01': 50, '10': 50}
-        confidence = dj._calculate_confidence(counts_balanced, 'balanced')
+        counts_balanced = {"01": 50, "10": 50}
+        confidence = dj._calculate_confidence(counts_balanced, "balanced")
         assert confidence == 1.0
 
     def test_enhanced_algorithm_failure_handling(self):
@@ -517,7 +517,7 @@ class TestEnhancedFeatures:
         dj = DeutschJozsaAlgorithm(n_qubits=2)
 
         # Mock a backend failure
-        with patch.object(dj.backend, 'run', side_effect=Exception("Backend error")):
+        with patch.object(dj.backend, "run", side_effect=Exception("Backend error")):
             summary = dj.run_enhanced_algorithm(FunctionType.CONSTANT, shots=50)
 
             assert summary.result == AlgorithmResult.FAILURE
@@ -532,7 +532,11 @@ class TestEnhancedFeatures:
 
         # Check that all fields are properly populated
         assert summary.function_type in [FunctionType.CONSTANT, FunctionType.BALANCED]
-        assert summary.result in [AlgorithmResult.SUCCESS, AlgorithmResult.FAILURE, AlgorithmResult.INCONCLUSIVE]
+        assert summary.result in [
+            AlgorithmResult.SUCCESS,
+            AlgorithmResult.FAILURE,
+            AlgorithmResult.INCONCLUSIVE,
+        ]
         assert 0.0 <= summary.confidence <= 1.0
         assert isinstance(summary.measurements, dict)
         assert isinstance(summary.metrics, ExecutionMetrics)
@@ -580,7 +584,7 @@ class TestEdgeCasesEnhanced:
         dj.run_enhanced_algorithm(FunctionType.CONSTANT, shots=50)
 
         # Add failed run
-        with patch.object(dj.backend, 'run', side_effect=Exception("Backend error")):
+        with patch.object(dj.backend, "run", side_effect=Exception("Backend error")):
             dj.run_enhanced_algorithm(FunctionType.BALANCED, shots=50)
 
         stats = dj.get_performance_stats()

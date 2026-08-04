@@ -2,8 +2,9 @@
 Setup configuration for Deutsch-Jozsa Quantum Algorithm package.
 """
 
-from setuptools import setup, find_packages
 from pathlib import Path
+
+from setuptools import find_packages, setup
 
 # Read the contents of README file
 this_directory = Path(__file__).parent
@@ -12,13 +13,15 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 # Read requirements
 requirements = []
 with open("requirements.txt", encoding="utf-8") as f:
-    requirements = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    requirements = [
+        line.strip() for line in f if line.strip() and not line.startswith("#")
+    ]
 
 dev_requirements = []
 with open("requirements-dev.txt", encoding="utf-8") as f:
     dev_requirements = [
-        line.strip() 
-        for line in f 
+        line.strip()
+        for line in f
         if line.strip() and not line.startswith("#") and not line.startswith("-r")
     ]
 
