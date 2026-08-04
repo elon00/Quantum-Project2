@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  quantum-app:
+    build:
+      context: .
+      target: production
+    container_name: quantum-project2
+    restart: unless-stopped
+    environment:
+      - QUANTUM_LOG_LEVEL=INFO
+    volumes:
+      - ./results:/app/results:rw
+      - ./logs:/app/logs:rw
+    networks:
+      - quantum-network
+
+  quantum-dev:
+    build:
+      context: .
+      target: base
+    container_name: quantum-project2-dev
+    restart: "no"
+    environment:
+      - QUANTUM_LOG_LEVEL=DEBUG
+    volumes:
+      - .:/app:rw
+      - /app/__pycache__
+      - /app/.pytest_cache
+      - /app/.mypy_cache
+      - /app/htmlcov
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    command: sleep infinity
+    networks:
+      - quantum-network
+    profiles:
+      - dev
+
+networks:
+  quantum-network:
+    driver: bridge
+
+volumes:
+  results:
+  logs:
