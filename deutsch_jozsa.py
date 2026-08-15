@@ -136,8 +136,8 @@ class DeutschJozsaAlgorithm:
 
             process = psutil.Process()
             memory_mb: float = process.memory_info().rss / 1024 / 1024  # Convert to MB
-            return memory_mb
-        except ImportError:
+            return max(0.0, float(memory_mb))
+        except (ImportError, Exception):
             return 0.0
 
     def create_constant_oracle(self, return_value: int = 0) -> QuantumCircuit:
@@ -294,9 +294,9 @@ class DeutschJozsaAlgorithm:
             counts: Dict[str, int] = result.get_counts()
 
             # Calculate execution metrics
-            execution_time = time.time() - start_time
+            execution_time = max(0.0, time.time() - start_time)
             final_memory = self._measure_memory_usage()
-            memory_usage = final_memory - initial_memory
+            memory_usage = max(0.0, final_memory - initial_memory)
 
             logger.info(
                 f"Circuit executed successfully: {execution_time:.3f}s, "
@@ -455,9 +455,9 @@ class DeutschJozsaAlgorithm:
             counts = self.run_circuit(circuit, shots, optimization_level)
 
             # Calculate metrics
-            execution_time = time.time() - start_time
+            execution_time = max(0.0, time.time() - start_time)
             final_memory = self._measure_memory_usage()
-            memory_usage = final_memory - initial_memory
+            memory_usage = max(0.0, final_memory - initial_memory)
 
             # Interpret results
             is_correct = self.interpret_result(counts, expected_type)
@@ -498,9 +498,9 @@ class DeutschJozsaAlgorithm:
             return summary
 
         except Exception as e:
-            execution_time = time.time() - start_time
+            execution_time = max(0.0, time.time() - start_time)
             final_memory = self._measure_memory_usage()
-            memory_usage = final_memory - initial_memory
+            memory_usage = max(0.0, final_memory - initial_memory)
 
             logger.error(
                 f"Enhanced algorithm failed after {execution_time:.3f}s: {str(e)}"

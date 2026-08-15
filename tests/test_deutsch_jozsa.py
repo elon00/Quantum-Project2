@@ -490,7 +490,9 @@ class TestEnhancedFeatures:
 
         # Memory usage should be tracked (might be 0 if psutil not available)
         assert isinstance(summary.metrics.memory_usage, (int, float))
-        assert summary.metrics.memory_usage >= 0
+        assert (
+            summary.metrics.memory_usage >= 0.0
+        ), f"Expected non-negative memory usage, got {summary.metrics.memory_usage}"
 
     def test_confidence_calculation(self):
         """Test confidence calculation for different scenarios."""
