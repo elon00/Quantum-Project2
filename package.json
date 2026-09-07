@@ -1,0 +1,25 @@
+{
+  "name": "quantum-project2-deutsch-jozsa",
+  "version": "2.0.0",
+  "description": "Deutsch-Jozsa Quantum Algorithm with NIST FIPS 203/204 Post-Quantum Cryptographic Defense",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test:python": "py -m pytest tests -k \"not test_algorithm_with_different_qubit_counts\"",
+    "test:nist": "node C:/Users/marti/quantumshield/node_modules/tsx/dist/cli.mjs tests/nist-pqc.test.mjs",
+    "audit:crypto": "node scripts/audit-crypto.mjs",
+    "reality:universal": "node C:/Users/marti/quantumshield/node_modules/tsx/dist/cli.mjs scripts/reality-universal.ts",
+    "reality:certify": "node C:/Users/marti/quantumshield/node_modules/tsx/dist/cli.mjs scripts/generate-urs-certificate.ts"
+  },
+  "keywords": [
+    "quantum-computing",
+    "deutsch-jozsa",
+    "qiskit",
+    "post-quantum",
+    "nist-fips-203",
+    "nist-fips-204",
+    "urs-10"
+  ],
+  "author": "elon00",
+  "license": "MIT"
+}

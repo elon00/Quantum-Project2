@@ -141,5 +141,9 @@ dmypy.json
 results/
 output/
 
+# Node
+node_modules/
+dist/
+
 # GitHub instructions
 .github/instructions/codacy.instructions.md
