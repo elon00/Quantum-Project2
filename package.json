@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "test:python": "py -m pytest tests -k \"not test_algorithm_with_different_qubit_counts\"",
+    "test:python": "python -m pytest tests -k \"not test_algorithm_with_different_qubit_counts\"",
     "test:nist": "npx tsx tests/nist-pqc.test.mjs",
     "audit:crypto": "node scripts/audit-crypto.mjs",
     "reality:universal": "npx tsx scripts/reality-universal.ts",
@@ -21,5 +21,8 @@
     "urs-10"
   ],
   "author": "elon00",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "tsx": "^4.21.0"
+  }
 }
