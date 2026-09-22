@@ -1,5 +1,10 @@
 # Enhanced Deutsch-Jozsa Quantum Algorithm
 
+## Independent verification boundary
+
+Repository tests, CI, internal scorecards, and cryptographic attestations are engineering evidence only. They are **not** an independent security audit, FIPS validation of the application, or production certification. Production claims require deployment-specific evidence, independent review, operational controls, and applicable compliance work.
+
+
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![Qiskit](https://img.shields.io/badge/Qiskit-1.0%2B-6929C4.svg)](https://qiskit.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
