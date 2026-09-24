@@ -1,0 +1,48 @@
+{
+  "x402Version": "1.0.0",
+  "version": "1.0.0",
+  "name": "Enhanced Deutsch-Jozsa Quantum Algorithm — Function Classification",
+  "type": "quantum-algorithm-library",
+  "category": "ai-agent-commerce",
+  "tags": [
+    "solana",
+    "qiskit",
+    "deutsch-jozsa",
+    "quantum-speedup",
+    "function-classification",
+    "x402"
+  ],
+  "provider": {
+    "name": "Enhanced Deutsch-Jozsa / Martin",
+    "website": "https://github.com/elon00/Quantum-Project2",
+    "payTo": "8qhW8ctXX77UNLTY9kx3XoAoH8kstQXPbCghUwqu34es",
+    "network": "solana-testnet",
+    "caip2": "solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z"
+  },
+  "endpoints": [
+    {
+      "path": "/api/v1/x402/deutsch-jozsa/classify",
+      "method": "POST",
+      "description": "Execute single-shot quantum function classification (constant vs balanced oracle)",
+      "pricing": {
+        "amountSol": 0.001,
+        "lamports": 1000000,
+        "currency": "SOL",
+        "alternativeUsdc": "0.01"
+      },
+      "challengeHeader": "WWW-Authenticate: x402 realm=\"quantum-dj\", payTo=\"8qhW8ctXX77UNLTY9kx3XoAoH8kstQXPbCghUwqu34es\", amount=\"0.001\", currency=\"SOL\", network=\"solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z\""
+    },
+    {
+      "path": "/api/v1/x402/circuit/metrics",
+      "method": "POST",
+      "description": "Generate circuit transpilation metrics, gate count, and quantum statevector analytics",
+      "pricing": {
+        "amountSol": 0.001,
+        "lamports": 1000000,
+        "currency": "SOL",
+        "alternativeUsdc": "0.01"
+      },
+      "challengeHeader": "WWW-Authenticate: x402 realm=\"quantum-dj\", payTo=\"8qhW8ctXX77UNLTY9kx3XoAoH8kstQXPbCghUwqu34es\", amount=\"0.001\", currency=\"SOL\", network=\"solana:4uhcVJyU9pJkvQyS88uRDiswHXSCkY3z\""
+    }
+  ]
+}
