@@ -1,0 +1,125 @@
+{
+  "engine": "REA_Reverse_Engineer_Anything",
+  "status": "STRUCTURE_RECONSTRUCTED",
+  "analyzed_files": 39,
+  "manifest": {
+    "CHANGELOG.md": {
+      "bytes": 3810
+    },
+    "CODE_OF_CONDUCT.md": {
+      "bytes": 2198
+    },
+    "CONTRIBUTING.md": {
+      "bytes": 9006
+    },
+    "deploy.bat": {
+      "bytes": 3717
+    },
+    "deploy.sh": {
+      "bytes": 5004
+    },
+    "DEPLOYMENT.md": {
+      "bytes": 8403
+    },
+    "deutsch_jozsa.py": {
+      "bytes": 21637
+    },
+    "docker-compose.yml": {
+      "bytes": 892
+    },
+    "Dockerfile": {
+      "bytes": 1677
+    },
+    "LICENSE": {
+      "bytes": 1096
+    },
+    "MANIFEST.in": {
+      "bytes": 503
+    },
+    "package.json": {
+      "bytes": 858
+    },
+    "pyproject.toml": {
+      "bytes": 3778
+    },
+    "quickstart.bat": {
+      "bytes": 2079
+    },
+    "quickstart.sh": {
+      "bytes": 2130
+    },
+    "README.md": {
+      "bytes": 13516
+    },
+    "REALITY_MANIFEST.json": {
+      "bytes": 1725
+    },
+    "requirements-dev.txt": {
+      "bytes": 569
+    },
+    "requirements.txt": {
+      "bytes": 545
+    },
+    "safety_report.json": {
+      "bytes": 130267
+    },
+    "security_report.json": {
+      "bytes": 766
+    },
+    "setup.py": {
+      "bytes": 3171
+    },
+    "URS_EVIDENCE_CERTIFICATE.json": {
+      "bytes": 11729
+    },
+    "docs\\api.md": {
+      "bytes": 7191
+    },
+    "scripts\\audit-crypto.mjs": {
+      "bytes": 7196
+    },
+    "scripts\\generate-urs-certificate.ts": {
+      "bytes": 4689
+    },
+    "scripts\\reality-universal.ts": {
+      "bytes": 16914
+    },
+    "scripts\\rea_inspector.py": {
+      "bytes": 1485
+    },
+    "scripts\\rsi_engine.py": {
+      "bytes": 2039
+    },
+    "src\\types.ts": {
+      "bytes": 942
+    },
+    "tests\\nist-pqc.test.mjs": {
+      "bytes": 4368
+    },
+    "tests\\reality_check_harness.py": {
+      "bytes": 1250
+    },
+    "tests\\test_deutsch_jozsa.py": {
+      "bytes": 21870
+    },
+    "tests\\test_integration.py": {
+      "bytes": 9891
+    },
+    "tests\\__init__.py": {
+      "bytes": 212
+    },
+    ".github\\workflows\\ci.yml": {
+      "bytes": 6376
+    },
+    ".github\\workflows\\qmoosa-rsi-rea-sync.yml": {
+      "bytes": 531
+    },
+    ".github\\workflows\\release.yml": {
+      "bytes": 2445
+    },
+    "src\\utils\\pqcCrypto.ts": {
+      "bytes": 7779
+    }
+  },
+  "timestamp": 1794028518
+}
