@@ -147,3 +147,6 @@ dist/
 
 # GitHub instructions
 .github/instructions/codacy.instructions.md
+
+# Lean 4 build artifacts
+lean_verify/.lake/
